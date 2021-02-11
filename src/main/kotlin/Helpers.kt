@@ -29,6 +29,7 @@ suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
 
 class FileDataHelper {
 
+    @Deprecated("use getContentAsync method")
     suspend fun getContent(source: String): String {
         lateinit var reader: BufferedReader
 

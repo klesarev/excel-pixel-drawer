@@ -61,10 +61,45 @@ fun drawRandImage(image: BufferedImage, stepSize: Int = 1, redRng: Int = 255, gr
 
 
 
-### Работа с файлами
+### Работа 
 
+Helpers.kt 
+
+#### Class FileDataHelper
+
+hjgj
+
+
+#### matrix2D
+
+```kotlin
+suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
+    val list = arrayListOf<List<Int>>()
+
+    FileDataHelper().getContentAsync(file).use { matrix ->
+        matrix.bufferedReader().lines().forEach { row ->
+            list.add(
+                row.split(delimiter)
+                    .map { it }
+                    .filter { it != "" }
+                    .map { it.toInt() }
+            )
+        }
+    }
+    return list
+}
+```
 
 тут какой то текст
+
+
+### Фильтры
+
+тут какой то текст
+
+#### desaturate
+
+Метод desaturate расширяет
 
 
 
