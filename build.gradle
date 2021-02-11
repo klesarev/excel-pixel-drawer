@@ -1,0 +1,32 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.30-RC"
+}
+
+repositories {
+    // Artifacts are also available on Maven Central
+    jcenter()
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+compileKotlin {
+    kotlinOptions.jvmTarget = 1.8
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation 'org.apache.poi:poi:5.0.0'
+    implementation 'org.apache.poi:poi-ooxml:5.0.0'
+}
