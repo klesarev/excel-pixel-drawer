@@ -1,4 +1,5 @@
-
+import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_INT_RGB
 
 /*
 * https://stackoverflow.com/questions/16497390/illegalargumentexception-color-parameter-outside-of-expected-range-red-green-b
@@ -11,6 +12,10 @@
 */
 
 fun main(args: Array<String>) {
+
+    val img = BufferedImage(800,800, TYPE_INT_RGB)
+    drawRandImage(img,2,20)
+    writeImage(img,"D:/test-git.bmp")
 
 }
 
