@@ -70,10 +70,38 @@ Helpers.kt
 
 #### Class FileDataHelper
 
-hjgj
+uhkh
 
+```kotlin
+suspend fun writeContentAsync(file: String, data: ByteArray, add: Boolean = false) = 
+    supervisorScope {
+        val dataStr = async(Dispatchers.IO) {
+            FileOutputStream(file, add).write(data)
+        }
+        try {
+            dataStr.await()
+        } catch (ex: Exception) {
+            throw Exception("@ ${ex.message}")
+        }
+    }
+```
+jyjjkh ljglk g
+
+```kotlin
+suspend fun getContentAsync(file: String): InputStream = supervisorScope {
+        val dataStr = async(Dispatchers.IO) {
+            FileInputStream(file)
+        }
+        try {
+            dataStr.await()
+        } catch (ex: Exception) {
+            throw Exception("@ ${ex.message}")
+        }
+    }
+```
 
 #### matrix2D
+kjhkjh
 
 ```kotlin
 suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
@@ -103,6 +131,13 @@ suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
 #### desaturate
 
 Метод desaturate расширяет
+```kotlin
+fun BufferedImage.desaturate(): BufferedImage {
+    val colorConvert = ColorConvertOp (ColorSpace.getInstance(ColorSpace.CS_GRAY), null)
+    return colorConvert.filter(this, this)
+}
+
+```
 
 
 
