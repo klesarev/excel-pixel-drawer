@@ -62,7 +62,7 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
             val color = cellStyle.fillForegroundColorColor
             if (color != null && color is XSSFColor) {
                 //println("${i.rowNum} % ${j.columnIndex}")
-                pixArray[i.rowNum][j.columnIndex] = color.argbHex.substring(2,8)
+                pixArray[i.rowNum][j.columnIndex] = color.argbHex.substring(0,8)
             }
         }
     }
@@ -137,8 +137,17 @@ fun drawRandImage(image: BufferedImage, stepSize: Int = 1, redRng: Int = 255, gr
 }
 
 val toRGB = { hex: String ->
-    val blue: Int = hex.toInt(16) and 0xff
-    val green: Int = hex.toInt(16) and 0xff00 shr 8
     val red: Int = hex.toInt(16) and 0xff0000 shr 16
+    val green: Int = hex.toInt(16) and 0xff00 shr 8
+    val blue: Int = hex.toInt(16) and 0xff
+    val alpha = hex.toInt(16) and 0 shr 24
     Color(red,green,blue)
+}
+
+val toRGBA = { hex: String ->
+    val red = hex.toLong(16) and 0xff0000 shr 16
+    val green = hex.toLong(16) and 0xff00 shr 8
+    val blue = hex.toLong(16) and 0xff
+    val alpha = hex.toLong(16) and 0xff000000 shr 24
+    Color(red.toInt(),green.toInt(),blue.toInt(),alpha.toInt())
 }

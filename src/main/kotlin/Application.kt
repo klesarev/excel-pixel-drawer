@@ -1,3 +1,4 @@
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB
 
@@ -13,9 +14,15 @@ import java.awt.image.BufferedImage.TYPE_INT_RGB
 
 fun main(args: Array<String>) {
 
-    val img = BufferedImage(800,800, TYPE_INT_RGB)
-    drawRandImage(img,2,20)
-    writeImage(img,"D:/test-git.bmp")
+    println(
+        getPixelColors("D:/pix.xlsx","editor")
+            .forEach { elem->
+                println(elem)
+            }
+    )
+
+
+
+    println(toRGBA("FF92D050"))
 
 }
-
