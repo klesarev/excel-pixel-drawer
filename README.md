@@ -46,7 +46,10 @@ fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: In
 Рисует изображение **_image_**, состоящее из пикселей с рандомным цветом.
 
 ```kotlin
-fun drawRandImage(image: BufferedImage, stepSize: Int = 1, redRng: Int = 255, greenRng: Int = 255, blueRng: Int = 255) {
+fun drawRandImage(
+    image: BufferedImage, stepSize: Int = 1, 
+    redRng: Int = 255, greenRng: Int = 255, blueRng: Int = 255
+) {
     for(posX in 0 until image.width step stepSize){
         for (posY in 0 until image.height step stepSize) {
             val r = if (redRng <= 0) 0 else Random.nextInt(0, redRng)
