@@ -1,12 +1,12 @@
 
 
-#Excel Pixel Drawer
+# Excel Pixel Drawer
 
 ![Альтернативный текст](pixel-heart.jpg "Excel Pixel Drawer")
 
 ## Описание
 Простой скрипт, который позволяет рисовать пиксельную графику, используя excel в качестве полотна. Заливая цветом 
-пиксели мы получаем на выходе картинку в любом форматате, в котором сохраним - png. bmp, jpg.
+ячеки в документе, мы получаем на выходе картинку в форматате - png. bmp, jpg.
 
 Вместо закрашеных ячеек в экселе подставляется прозрачный пиксель. Шириня и высота картинки рассчитывается исходя из 
 крайних положений закрашенных ячеек по стобцам и строкам (_оси X,Y_).
@@ -24,15 +24,16 @@
     writeImage(img,"D:/test-git.bmp") // записываем изображение
 ```
 ## Пиксельное изображение из Excel
+
 ```kotlin
     // загружаем массив пикселей из файла pix.xlsx и листа с названием editor
-    getPixelColors("D:/pix.xlsx","editor")
+    val res = getPixelColors("D:/pix.xlsx","editor")
 
-    // рисуем картинку
-    drawRandImage(img,2,20)
+    // сохраняем в переменную изображение
+    val renderedImage = renderImage(res)
 
-    // записываем изображение
-    writeImage(img,"D:/test-git.bmp")
+    // записываем результат в файл
+    writeImage(renderedImage,"D:/final.png")
 ```
 
 
@@ -96,43 +97,6 @@ fun drawRandImage(
 val toRGB = { hex: String -> }
 val toRGBA = { hex: String -> }
 ```
-
-
-
-### Работа 
-
-Helpers.kt 
-
-#### Class FileDataHelper
-
-uhkh
-
-```kotlin
-suspend fun writeContentAsync(file: String, data: ByteArray, add: Boolean = false) = 
-    supervisorScope {
-        //....
-    }
-```
-jyjjkh ljglk g
-
-```kotlin
-suspend fun getContentAsync(file: String): InputStream = 
-    supervisorScope {
-        //....
-    }
-```
-
-#### matrix2D
-kjhkjh
-
-```kotlin
-suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
-    //....
-}
-```
-
-тут какой то текст
-
 
 ### Фильтры
 

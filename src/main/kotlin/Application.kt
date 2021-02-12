@@ -23,6 +23,10 @@ fun main(args: Array<String>) {
 
 
 
-    println(toRGBA("FF92D050"))
+    val res = getPixelColors("D:/pix.xlsx","editor")
+
+    val renderedImage = renderImage(res)
+
+    writeImage(renderedImage,"D:/final.png")
 
 }
