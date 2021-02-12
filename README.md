@@ -19,8 +19,13 @@
 **_writeImage_** сохраняет наше изображение.
 
 ```kotlin
+    // создаем изображение
     val img = BufferedImage(800,800, TYPE_INT_RGB) // картинка
-    drawRandImage(img,2,20) // рисуем картинку
+        
+    // отрисовываесм рандомные пиксели с шагом 2 и красным до 20
+    drawRandImage(img,2,20)
+
+    // записываем картинку
     writeImage(img,"D:/test-git.bmp") // записываем изображение
 ```
 ## Пиксельное изображение из Excel
@@ -55,21 +60,22 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
 
 #### drawPixel
 
-Рисует пиксель на изображении **_image_**, с координатами **_x_** и **_y_** и цветом **_red_**, **_green_**, **_blue_** 
-(_красный, зеленый, синий_).
+Рисует пиксель на изображении **_image_**, с координатами **_x_** и **_y_** и цветом **_red_**, **_green_**, **_blue_**,
+**_alpha_** (_красный, зеленый, синий, альфа_).
 
 ```kotlin
-fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, image: BufferedImage) {
+fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
     //....
 }
 ```
 
 #### drawTile
 Рисует плитку (_большой пиксель_) на изображении **_image_**, в точке с координатами **_startX_** и **_startY_** 
-с заданным размером **_size_**. Цвет определяется переменными **_red_**, **_green_**, **_blue_** (_красный, зеленый, синий_).
+с заданным размером **_size_**. Цвет определяется переменными **_red_**, **_green_**, **_blue_**, **_alpha_**
+(_красный, зеленый, синий, альфа_).
 
 ```kotlin
-fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: Int, image: BufferedImage) {
+fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: Int, alpha: Int, image: BufferedImage) {
     //....
 }
 ```
@@ -77,24 +83,23 @@ fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: In
 #### drawRandImage
 
 Рисует изображение **_image_**, состоящее из пикселей с рандомным цветом через заданный шаг **_stepSize_** в пикселях. 
-Можно указать уровень красного **_redRng_**, зеленого **_greenRng_** и синего **_blueRng_**. Чем меньше число, тем меньше
-количество конкретного цвета в итоговом изображении.
+Можно указать уровень красного **_redRng_**, зеленого **_greenRng_**, синего **_blueRng_** и альфа канала **_alpha_**
+Чем меньше число, тем меньше количество конкретного цвета в итоговом изображении.
 
 ```kotlin
 fun drawRandImage(
-    image: BufferedImage, stepSize: Int = 1, 
-    redRng: Int = 255, greenRng: Int = 255, blueRng: Int = 255
+    image: BufferedImage, stepSize: Int = 1,
+    redRng: Int = 255, greenRng: Int = 255, blueRng: Int = 255, alpha: Int = 255
 ) {
     //....
 }
 ```
 
-#### toRGB / toRGBA
+#### toRGBA
 
-Обе функции принимают на вход строку **_hex_** с 16-рязрядным представлением цвета и возвращают джавовский объект Color.
-В первом случае без альфа-канала(_toRGB_), а во втором - с альфа каналом.
+Функция принимают на вход строку **_hex_** с 16-рязрядным представлением цвета и возвращают java объект Color 
+с альфа каналом.
 ```kotlin
-val toRGB = { hex: String -> }
 val toRGBA = { hex: String -> }
 ```
 

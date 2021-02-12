@@ -1,5 +1,6 @@
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_INT_ARGB
 import java.awt.image.BufferedImage.TYPE_INT_RGB
 
 /*
@@ -14,19 +15,14 @@ import java.awt.image.BufferedImage.TYPE_INT_RGB
 
 fun main(args: Array<String>) {
 
-    println(
-        getPixelColors("D:/pix.xlsx","editor")
-            .forEach { elem->
-                println(elem)
-            }
-    )
 
+    // получаем массив из xlsx файла - лист "editor"
+    val res = getPixelColors("pix.xlsx","editor")
 
-
-    val res = getPixelColors("D:/pix.xlsx","editor")
-
+    // получаем отрендеренное изображение
     val renderedImage = renderImage(res)
 
-    writeImage(renderedImage,"D:/final.png")
+    // записываем изображение
+    writeImage(renderedImage,"D:/final23.png")
 
 }
