@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage.TYPE_INT_RGB
 * Created by MrFox
 */
 
-fun main() {
+suspend fun main() {
 
 
     // получаем массив из xlsx файла - лист "editor"

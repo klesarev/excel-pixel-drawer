@@ -6,6 +6,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.lang.Exception
 import java.util.ArrayList
 import javax.imageio.ImageIO
@@ -96,8 +97,8 @@ fun writeImage(img: BufferedImage, file: String) {
     try {
         imgthread.start()
     } catch (ex: Exception) {
-        ex.printStackTrace()
         imgthread.interrupt()
+        throw FileNotFoundException(ex.message)
     }
 }
 

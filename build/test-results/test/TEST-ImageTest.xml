@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ImageTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-15T20:39:44" hostname="DESKTOP-UE975S3" time="0.014">
+<testsuite name="ImageTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-02-15T21:15:54" hostname="DESKTOP-UE975S3" time="0.104">
   <properties/>
+  <testcase name="testExceptionFile" classname="ImageTest" time="0.09"/>
   <testcase name="testHexToRgba" classname="ImageTest" time="0.014"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
