@@ -24,20 +24,6 @@ fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: In
     }
 }
 
-fun drawRandImage(
-    image: BufferedImage, stepSize: Int = 1,
-    redRng: Int = 255, greenRng: Int = 255, blueRng: Int = 255, alpha: Int = 255
-) {
-    for(posX in 0 until image.width step stepSize){
-        for (posY in 0 until image.height step stepSize) {
-            val r = if (redRng <= 0) 0 else Random.nextInt(0, redRng)
-            val g = if (greenRng <= 0) 0 else Random.nextInt(0, greenRng)
-            val b = if (blueRng <= 0) 0 else Random.nextInt(0, blueRng)
-            drawPixel(posX, posY, r, g, b, alpha, image)
-        }
-    }
-}
-
 fun renderImage(pixels: ArrayList<List<String>>): BufferedImage {
     val resultImage = BufferedImage(
         pixels[0].size*10,

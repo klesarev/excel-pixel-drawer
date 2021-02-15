@@ -9,17 +9,7 @@ import java.nio.file.StandardOpenOption
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-
-import kotlin.jvm.internal.Intrinsics
-import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.*
-import java.util.logging.Formatter
-
-
-/*
-* https://javarush.ru/groups/posts/2200-logirovanie-razmotatjh-klubok-stektreysa
-* */
 
 
 suspend fun matrix2D(file: String, delimiter: String): ArrayList<List<Int>> {
@@ -69,28 +59,29 @@ class FileDataHelper {
         }
     }
 
-    suspend fun writeContentAsync(file: String, data: ByteArray, add: Boolean = false) = supervisorScope {
-        val dataStr = async(Dispatchers.IO) {
-            FileOutputStream(file, add).write(data)
+    suspend fun writeContentAsync(file: String, data: ByteArray, add: Boolean = false) =
+        supervisorScope {
+            val dataStr = async(Dispatchers.IO) {
+                FileOutputStream(file, add).write(data)
+            }
+            try {
+                dataStr.await()
+            } catch (ex: Exception) {
+                throw Exception("@ ${ex.message}")
+            }
         }
-        try {
-            dataStr.await()
-        } catch (ex: Exception) {
-            throw Exception("@ ${ex.message}")
-        }
-    }
 
 
-    suspend fun getContentAsync(file: String): InputStream = supervisorScope {
-        // supervisorScope отменяет только текущую корутину
-        val dataStr = async(Dispatchers.IO) {
-            FileInputStream(file)
+    suspend fun getContentAsync(file: String): InputStream =
+        supervisorScope {
+            val dataStr = async(Dispatchers.IO) {
+                FileInputStream(file)
+            }
+            try {
+                dataStr.await()
+            } catch (ex: Exception) {
+                throw Exception("@ ${ex.message}")
+            }
         }
-        try {
-            dataStr.await()
-        } catch (ex: Exception) {
-            throw Exception("@ ${ex.message}")
-        }
-    }
 
 }
