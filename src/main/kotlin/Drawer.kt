@@ -9,7 +9,6 @@ import java.io.FileInputStream
 import java.lang.Exception
 import java.util.ArrayList
 import javax.imageio.ImageIO
-import kotlin.random.Random
 
 
 fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
@@ -72,7 +71,7 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
             val cellStyle = j.cellStyle
             val color = cellStyle.fillForegroundColorColor
             if (color != null && color is XSSFColor) {
-                pixArray[i.rowNum][j.columnIndex] = color.argbHex.substring(0,8)
+                pixArray[i.rowNum][j.columnIndex] = color.argbHex
             }
         }
     }
@@ -91,9 +90,9 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
 }
 
 fun writeImage(img: BufferedImage, file: String) {
-    val imgthread = Thread(Runnable {
+    val imgthread = Thread {
         ImageIO.write(img, File(file).extension, File(file))
-    })
+    }
     try {
         imgthread.start()
     } catch (ex: Exception) {
