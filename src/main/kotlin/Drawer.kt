@@ -1,3 +1,4 @@
+import org.apache.batik.svggen.SVGGraphics2D
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.WorkbookFactory
@@ -24,23 +25,30 @@ fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: In
     }
 }
 
-fun renderImage(pixels: ArrayList<List<String>>): BufferedImage {
+fun renderImage(pixels: ArrayList<List<String>>, pxSize: Int = 10): BufferedImage {
+
+    val pixelSize = if(pxSize > 0) pxSize else 10
+
     val resultImage = BufferedImage(
-        pixels[0].size*10,
-        pixels.size*10,
+        pixels[0].size * pixelSize,
+        pixels.size * pixelSize,
         BufferedImage.TYPE_INT_ARGB
     )
 
     pixels.forEachIndexed { posY, row ->
         row.forEachIndexed { posX, col ->
             drawTile(
-                (posX)*10,(posY)*10, 10,
+                (posX) * pixelSize,(posY) * pixelSize, pixelSize,
                 toRGBA(col).red, toRGBA(col).green,toRGBA(col).blue,toRGBA(col).alpha,
                 resultImage
             )
         }
     }
     return resultImage
+}
+
+fun drawSVG(pixels: ArrayList<List<String>>): String {
+    return "soon..."
 }
 
 fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
@@ -62,8 +70,8 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
         }
     }
 
-    val rowSize = rowArray.maxOf { el->el }
-    val cellSize = cellArray.maxOf{el->el}
+    val rowSize = rowArray.maxOf{ el -> el }
+    val cellSize = cellArray.maxOf{ el -> el }
 
     val pixArray:Array<Array<String>> = Array(rowSize+1) {Array(cellSize+1) {""} }
 
