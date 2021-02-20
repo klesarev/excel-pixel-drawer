@@ -1,8 +1,5 @@
-import org.apache.batik.svggen.SVGGraphics2D
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.WorkbookFactory
-import org.apache.poi.xssf.usermodel.XSSFColor
+import org.apache.commons.codec.binary.Hex
+import org.apache.poi.ss.usermodel.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -11,6 +8,11 @@ import java.io.FileNotFoundException
 import java.lang.Exception
 import java.util.ArrayList
 import javax.imageio.ImageIO
+
+import org.apache.poi.xssf.usermodel.*
+
+import java.io.FileOutputStream
+import org.apache.poi.xssf.usermodel.XSSFColor
 
 
 fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
@@ -49,6 +51,35 @@ fun renderImage(pixels: ArrayList<List<String>>, pxSize: Int = 10): BufferedImag
 
 fun drawSVG(pixels: ArrayList<List<String>>): String {
     return "soon..."
+}
+
+fun renderExcel(pixels: ArrayList<List<String>>) {
+    val workbook = XSSFWorkbook()
+    val sheet = workbook.createSheet("Calendar")
+
+
+    for (rowNum in 0 until pixels.size) {
+        val row: Row = sheet.createRow(rowNum)
+        for (colNum in 0 until pixels[0].size) {
+            val cell = row.createCell(colNum)
+
+            sheet.setColumnWidth(cell.address.column, (3 * 256).toInt());
+
+            val style = workbook.createCellStyle()
+            val rgbS = pixels[cell.address.row][cell.address.column]
+            val rgbB: ByteArray = Hex.decodeHex(rgbS) // get byte array from hex string
+
+            style.setFillForegroundColor(XSSFColor(toRGB(rgbS), null))
+            style.fillPattern = FillPatternType.SOLID_FOREGROUND;
+
+            cell.cellStyle = style
+            //cell.setCellValue(pixels[cell.address.row][cell.address.column])
+
+            println("ROW: ${cell.address.row} COLUMN ${cell.address.column} COLOR ${pixels[cell.address.row][cell.address.column]}")
+        }
+    }
+
+    FileOutputStream("D:/JavaBooks.xlsx").use { outputStream -> workbook.write(outputStream) }
 }
 
 fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
@@ -90,7 +121,7 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
     pixArray.forEach { rowX ->
         for (elem in rowX.indices) {
             if (rowX[elem] == "") {
-                rowX[elem] = "FF0000"
+                rowX[elem] = "FFFFFF"
             }
         }
         pixelMatrix.add(rowX.toList())
@@ -108,6 +139,14 @@ fun writeImage(img: BufferedImage, file: String) {
         imgthread.interrupt()
         throw FileNotFoundException(ex.message)
     }
+}
+
+
+val toRGB = { hex: String ->
+    val red = hex.toLong(16) and 0xff0000 shr 16
+    val green = hex.toLong(16) and 0xff00 shr 8
+    val blue = hex.toLong(16) and 0xff
+    Color(red.toInt(),green.toInt(),blue.toInt())
 }
 
 val toRGBA = { hex: String ->

@@ -1,7 +1,4 @@
-import java.awt.Color
-import java.awt.image.BufferedImage
-import java.awt.image.BufferedImage.TYPE_INT_ARGB
-import java.awt.image.BufferedImage.TYPE_INT_RGB
+import java.util.ArrayList
 
 /*
 * Created by MrFox
@@ -14,9 +11,12 @@ suspend fun main() {
     val res = getPixelColors("D:/pix.xlsx","editor")
 
     // получаем отрендеренное изображение
-    val renderedImage = renderImage(res)
+    val renderedImage = renderImage(res, 30)
 
     // записываем изображение
     writeImage(renderedImage,"D:/final2322.png")
+
+
+    renderExcel(res)
 
 }
