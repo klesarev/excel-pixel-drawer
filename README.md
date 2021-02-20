@@ -103,6 +103,9 @@ fun BufferedImage.desaturate(): BufferedImage {
 
 ## История изменений
 
+### Excel Pixel drawer 1.0.2
++ Функция отрисовки массива пикселей в Excel
+
 ### Excel Pixel drawer 1.0.1
 Добавлено несколько улучшений
 
