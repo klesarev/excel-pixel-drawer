@@ -1,4 +1,3 @@
-import org.apache.commons.codec.binary.Hex
 import org.apache.poi.ss.usermodel.*
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -8,9 +7,7 @@ import java.io.FileNotFoundException
 import java.lang.Exception
 import java.util.ArrayList
 import javax.imageio.ImageIO
-
 import org.apache.poi.xssf.usermodel.*
-
 import java.io.FileOutputStream
 import org.apache.poi.xssf.usermodel.XSSFColor
 
@@ -53,33 +50,40 @@ fun drawSVG(pixels: ArrayList<List<String>>): String {
     return "soon..."
 }
 
-fun renderExcel(pixels: ArrayList<List<String>>) {
+fun renderToExcel(pixels: ArrayList<List<String>>, file: String, listName: String = "list") {
     val workbook = XSSFWorkbook()
-    val sheet = workbook.createSheet("Calendar")
+    val sheet = workbook.createSheet(listName)
 
-
-    for (rowNum in 0 until pixels.size) {
+    for (rowNum in 0 until pixels.size-1) {
         val row: Row = sheet.createRow(rowNum)
-        for (colNum in 0 until pixels[0].size) {
+        for (colNum in 0 until pixels[0].size-1) {
             val cell = row.createCell(colNum)
 
             sheet.setColumnWidth(cell.address.column, (3 * 256).toInt());
 
             val style = workbook.createCellStyle()
             val rgbS = pixels[cell.address.row][cell.address.column]
-            val rgbB: ByteArray = Hex.decodeHex(rgbS) // get byte array from hex string
 
-            style.setFillForegroundColor(XSSFColor(toRGB(rgbS), null))
-            style.fillPattern = FillPatternType.SOLID_FOREGROUND;
+            if ( rgbS != "FFFFFF") {
 
-            cell.cellStyle = style
-            //cell.setCellValue(pixels[cell.address.row][cell.address.column])
+                style.apply {
+                    setFillForegroundColor(XSSFColor(toRGBA(rgbS), null))
+                    fillPattern = FillPatternType.SOLID_FOREGROUND;
+                }
 
-            println("ROW: ${cell.address.row} COLUMN ${cell.address.column} COLOR ${pixels[cell.address.row][cell.address.column]}")
+                cell.cellStyle = style
+            }
+
+            println(
+                "ROW: ${cell.address.row} " +
+                "COLUMN: ${cell.address.column} " +
+                "COLOR: ${pixels[cell.address.row][cell.address.column]}"
+            )
         }
     }
 
-    FileOutputStream("D:/JavaBooks.xlsx").use { outputStream -> workbook.write(outputStream) }
+    FileOutputStream(file)
+        .use { outputStream -> workbook.write(outputStream) }
 }
 
 fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {

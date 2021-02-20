@@ -31,7 +31,11 @@
 
     // записываем результат в файл
     writeImage(renderedImage,"D:/final.png")
+
+    // записываем в excel
+    renderToExcel(res,"D:/toPix.xlsx","pix")
 ```
+
 
 ## Функции
 ### Отрисовка изображений
