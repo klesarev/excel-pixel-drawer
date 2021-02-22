@@ -12,6 +12,8 @@ fun main() {
     // получаем отрендеренное изображение
     renderImage(res, file="D:/test.png", pixelSize = 2)
 
-    renderExcel(getImagePixels("D:/test.png"),"list","D:/test.xlsx")
+    val pixels = getImagePixels("D:/test.png")
+
+    renderExcel(pixels,"list","D:/test.xlsx")
 
 }

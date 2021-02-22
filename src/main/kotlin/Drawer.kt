@@ -12,11 +12,11 @@ import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.apache.xalan.xsltc.util.IntegerArray
 
 
-fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
+fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue:Int, alpha:Int, image:BufferedImage) {
     image.setRGB(x, y, Color(red,green,blue,alpha).rgb)
 }
 
-fun drawTile(startX: Int, startY: Int, size: Int, red: Int, green: Int, blue: Int, alpha: Int, image: BufferedImage) {
+fun drawTile(startX: Int, startY:Int, size:Int, red:Int, green:Int, blue:Int, alpha:Int, image:BufferedImage) {
     for (posX in startX until startX+size) {
         for (posY in startY until startY+size) {
             drawPixel(posX,posY,red,green,blue,alpha,image)
@@ -51,6 +51,7 @@ fun renderSVG(pixels: ArrayList<List<String>>): String {
     return "soon..."
 }
 
+@Synchronized
 fun getImagePixels(file: String):ArrayList<List<String>> {
 
     val image: BufferedImage = ImageIO.read(File(file))
@@ -59,15 +60,7 @@ fun getImagePixels(file: String):ArrayList<List<String>> {
 
     for (posX in 0 until image.height) {
         for (posY in 0 until image.width) {
-
-            val pixColor: Int = image.getRGB(posY, posX)
-
-            val red = pixColor shr 16 and 255
-            val green = pixColor shr 8 and 255
-            val blue = pixColor and 255
-
-
-            pixArray[posX][posY] = Integer.toHexString(Color(red,green,blue).rgb)
+            pixArray[posX][posY] = toHEX(image.getRGB(posY, posX))
         }
     }
 
@@ -118,6 +111,7 @@ fun renderExcel(pixels: ArrayList<List<String>>, listName: String = "list", file
     } finally {
         streamThread.interrupt()
     }
+
 }
 
 @Synchronized
@@ -166,17 +160,4 @@ fun getExcelPixels(file: String, listName: String): ArrayList<List<String>> {
         pixelMatrix.add(rowX.toList())
     }
     return pixelMatrix
-}
-
-@Synchronized
-fun writeImage(img: BufferedImage, file: String) {
-    val imgthread = Thread {
-        ImageIO.write(img, File(file).extension, File(file))
-    }
-    try {
-        imgthread.start()
-    } catch (ex: Exception) {
-        imgthread.interrupt()
-        throw FileNotFoundException(ex.message)
-    }
 }
