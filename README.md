@@ -23,89 +23,36 @@
 
 
 ```kotlin
-    // загружаем массив пикселей из файла pix.xlsx и листа с названием editor
-    val res = getPixelColors("D:/pix.xlsx","editor")
+    // получаем массив из xlsx файла - лист "editor"
+    val res = getExcelPixels("D:/pix.xlsx","editor")
 
-    // сохраняем в переменную изображение
-    val renderedImage = renderImage(res)
-
-    // записываем результат в файл
-    writeImage(renderedImage,"D:/final.png")
-
-    // записываем в excel
-    renderToExcel(res,"D:/toPix.xlsx","pix")
+    // получаем отрендеренное изображение
+    renderImage(res, file="D:/test.png", pixelSize = 2)
 ```
 
-
-## Функции
-### Отрисовка изображений
-
-В файле Drawer.kt находятся функции для отрисовки изображения. Ниже приведено краткое описание каждой.
-
-#### getPixelColors
-
-Метод принимает на вход файл **_file_** в формате **_.xlsx_** и название листа **_listName_** в документе, в котором 
-происходит рисование. Возвращает двухмерный список с информацией о пикселях для дальнейшей отрисовки.
+### Загрузить изображение в Excel
+Чтобы загрузить изображение в Excel в виде пиксельной сетки вызываем метод **__getImagePixels__**, куда передаем путь
+к файлу картинки. Затем, загружаем полученный массив пикселей в excel с помошью **__renderExcel__**, где первый аргумент
+- результат функции getImagePixels, второй - название листа в файле xlsx, а третий аргумент - итоговый файл в формате 
+xlsx. Если два последних аргумента можно не указывать, то по умолчанию лист будет называться __list__, а файл будет 
+  сохранен под именем - __excel_from_image.xlsx__ в папке с проектом.
 
 ```kotlin
-fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
-    //....
-}
+    // загружаем пиксели из файла картинки
+    val pixels = getImagePixels("D:/test.png")
+    
+    // рендерим пиксели в Excel
+    renderExcel(pixels,"list","D:/test.xlsx")
 ```
 
-#### drawPixel
 
-Рисует пиксель на изображении **_image_**, с координатами **_x_** и **_y_** и цветом **_red_**, **_green_**, **_blue_**,
-**_alpha_** (_красный, зеленый, синий, альфа_).
-
-```kotlin
-fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
-    //....
-}
-```
-
-#### drawTile
-Рисует плитку (_большой пиксель_) на изображении **_image_**, в точке с координатами **_startX_** и **_startY_** 
-с заданным размером **_size_**. Цвет определяется переменными **_red_**, **_green_**, **_blue_**, **_alpha_**
-(_красный, зеленый, синий, альфа_).
-
-```kotlin
-fun drawTile(
-    startX: Int, startY: Int, 
-    size: Int, red: Int, green: Int, blue: Int, alpha: Int, 
-    image: BufferedImage
-) {
-    //....
-}
-```
-
-#### toRGBA
-
-Функция принимают на вход строку **_hex_** с 16-разрядным представлением цвета и возвращают java объект Color 
-с альфа каналом.
-```kotlin
-val toRGBA = { hex: String -> }
-```
-
-### Фильтры
-
-Здесь указаны фильтры, которые расширяют стандартный класс BufferedImage - черно-белый, сепия, размытие, glitch и
-многие другие. Список постоянно пополняется.
-#### desaturate
-
-Метод **_desaturate_** расширяет стандартный java класс BufferedImage и возвращает его же в черно-белом виде.
-```kotlin
-fun BufferedImage.desaturate(): BufferedImage {
-    //....
-}
-
-```
 
 ## История изменений
 
 ### Excel Pixel drawer 1.1
 + Функция отрисовки массива пикселей в Excel
 + Улучшена производительность
++ Исправлены ошибки
 
 ### Excel Pixel drawer 1.0.1
 Добавлено несколько улучшений
