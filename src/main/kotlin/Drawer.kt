@@ -1,15 +1,15 @@
 import org.apache.poi.ss.usermodel.*
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.lang.Exception
 import java.util.ArrayList
 import javax.imageio.ImageIO
 import org.apache.poi.xssf.usermodel.*
-import java.io.FileOutputStream
 import org.apache.poi.xssf.usermodel.XSSFColor
+import java.io.*
+import javax.imageio.stream.ImageInputStream
+import org.apache.poi.hssf.usermodel.HeaderFooter.file
+import org.apache.xalan.xsltc.util.IntegerArray
 
 
 fun drawPixel(x:Int, y:Int, red:Int, green:Int, blue: Int, alpha: Int, image: BufferedImage) {
@@ -46,44 +46,77 @@ fun renderImage(pixels: ArrayList<List<String>>, pxSize: Int = 10): BufferedImag
     return resultImage
 }
 
-fun drawSVG(pixels: ArrayList<List<String>>): String {
+fun renderSVG(pixels: ArrayList<List<String>>): String {
     return "soon..."
 }
 
-fun renderToExcel(pixels: ArrayList<List<String>>, file: String, listName: String = "list") {
+fun pixelsFromImage(file: String):ArrayList<List<String>> {
+
+    val image: BufferedImage = ImageIO.read(File(file))
+
+    val pixArray:Array<Array<String>> = Array(image.width) {Array(image.height) {""} }
+
+    for (posX in 0 until image.width) {
+        for (posY in 0 until image.height) {
+
+            val pixColor: Int = image.getRGB(posY, posX)
+
+            val red = pixColor shr 16 and 255
+            val green = pixColor shr 8 and 255
+            val blue = pixColor and 255
+
+            pixArray[posX][posY] = Integer.toHexString(Color(red,green,blue).rgb).substring(2)
+        }
+    }
+
+    val pixelMatrix = arrayListOf<List<String>>()
+
+    pixArray.forEach { rowX ->
+        pixelMatrix.add(rowX.toList())
+    }
+    return pixelMatrix
+
+}
+
+@Synchronized
+fun renderExcel(pixels: ArrayList<List<String>>, file: String, listName: String = "list") {
     val workbook = XSSFWorkbook()
     val sheet = workbook.createSheet(listName)
 
-    for (rowNum in 0 until pixels.size-1) {
+    for (rowNum in 0 until pixels.size) {
         val row: Row = sheet.createRow(rowNum)
-        for (colNum in 0 until pixels[0].size-1) {
+        for (colNum in 0 until pixels[0].size) {
             val cell = row.createCell(colNum)
 
             sheet.setColumnWidth(cell.address.column, (3 * 256).toInt());
 
-            val style = workbook.createCellStyle()
-            val rgbS = pixels[cell.address.row][cell.address.column]
 
-            if ( rgbS != "FFFFFF") {
+            val rgbHex = pixels[cell.address.row][cell.address.column]
 
+            if ( rgbHex != "ffffff") {
+                val style = workbook.createCellStyle()
                 style.apply {
-                    setFillForegroundColor(XSSFColor(toRGBA(rgbS), null))
+                    setFillForegroundColor(XSSFColor(toRGBA(rgbHex), null))
                     fillPattern = FillPatternType.SOLID_FOREGROUND;
                 }
-
                 cell.cellStyle = style
             }
 
-            println(
-                "ROW: ${cell.address.row} " +
-                "COLUMN: ${cell.address.column} " +
-                "COLOR: ${pixels[cell.address.row][cell.address.column]}"
-            )
         }
     }
 
-    FileOutputStream(file)
-        .use { outputStream -> workbook.write(outputStream) }
+    val streamThread = Thread {
+        FileOutputStream(file)
+            .use { outputStream -> workbook.write(outputStream) }
+    }
+
+    try {
+        streamThread.start()
+    } catch (ex: Exception) {
+        throw Exception(ex.localizedMessage)
+    } finally {
+        streamThread.interrupt()
+    }
 }
 
 fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
@@ -132,7 +165,7 @@ fun getPixelColors(file: String, listName: String): ArrayList<List<String>> {
     }
     return pixelMatrix
 }
-
+@Synchronized
 fun writeImage(img: BufferedImage, file: String) {
     val imgthread = Thread {
         ImageIO.write(img, File(file).extension, File(file))
@@ -145,13 +178,6 @@ fun writeImage(img: BufferedImage, file: String) {
     }
 }
 
-
-val toRGB = { hex: String ->
-    val red = hex.toLong(16) and 0xff0000 shr 16
-    val green = hex.toLong(16) and 0xff00 shr 8
-    val blue = hex.toLong(16) and 0xff
-    Color(red.toInt(),green.toInt(),blue.toInt())
-}
 
 val toRGBA = { hex: String ->
     val red = hex.toLong(16) and 0xff0000 shr 16

@@ -10,12 +10,15 @@ suspend fun main() {
     val res = getPixelColors("D:/pix.xlsx","editor")
 
     // получаем отрендеренное изображение
-    val renderedImage = renderImage(res, 50)
+    val renderedImage = renderImage(res, 5)
 
-    // записываем изображение
-    writeImage(renderedImage,"D:/final2322.png")
+    writeImage(renderedImage,"D:/test.png")
 
-    // записываем в excel
-    renderToExcel(res,"D:/toPix.xlsx","pix")
+    val px = pixelsFromImage("D:/test.png")
+    px.forEach {
+        println(it)
+    }
+
+    renderExcel(px,"D:/text.xlsx")
 
 }
