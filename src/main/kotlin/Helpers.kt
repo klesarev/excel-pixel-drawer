@@ -1,52 +1,9 @@
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.supervisorScope
-import java.io.*
-import java.lang.Exception
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import java.awt.Color
 
-
-object FileDataHelper {
-
-    fun writeContent(source: String, content: String) {
-        try {
-            Files.write(
-                Paths.get(source), content.toByteArray(),
-                StandardOpenOption.APPEND,
-                StandardOpenOption.CREATE
-            )
-        } catch (error: IOException) {
-            error.printStackTrace()
-        }
-    }
-
-    suspend fun writeContentAsync(file: String, data: ByteArray, add: Boolean = false) =
-        supervisorScope {
-            val dataStr = async(Dispatchers.IO) {
-                FileOutputStream(file, add).write(data)
-            }
-            try {
-                dataStr.await()
-            } catch (ex: Exception) {
-                throw Exception("@ ${ex.message}")
-            }
-        }
-
-    suspend fun getContentAsync(file: String): InputStream =
-        supervisorScope {
-            val dataStr = async(Dispatchers.IO) {
-                FileInputStream(file)
-            }
-            try {
-                dataStr.await()
-            } catch (ex: Exception) {
-                throw Exception("@ ${ex.message}")
-            }
-        }
-
+val toRGBA = { hex: String ->
+    val red = hex.toLong(16) and 0xff0000 shr 16
+    val green = hex.toLong(16) and 0xff00 shr 8
+    val blue = hex.toLong(16) and 0xff
+    val alpha = hex.toLong(16) and 0xff000000 shr 24
+    Color(red.toInt(),green.toInt(),blue.toInt(),alpha.toInt())
 }

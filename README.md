@@ -110,7 +110,6 @@ fun BufferedImage.desaturate(): BufferedImage {
 ### Excel Pixel drawer 1.0.1
 Добавлено несколько улучшений
 
-+ Отрисовка изображения в форматы - bmp, png, jpeg (_jpg_)
 + Черно-белый фильтр для изображения
 + Свой размер плитки (пикселя)
 
