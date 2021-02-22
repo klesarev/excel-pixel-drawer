@@ -12,13 +12,13 @@ suspend fun main() {
     // получаем отрендеренное изображение
     val renderedImage = renderImage(res, 5)
 
+    // записываем изобаражение
     writeImage(renderedImage,"D:/test.png")
 
+    // получаем массив пикселей
     val px = pixelsFromImage("D:/test.png")
-    px.forEach {
-        println(it)
-    }
 
+    // рендерим изображение в excel файл
     renderExcel(px,"D:/text.xlsx")
 
 }
