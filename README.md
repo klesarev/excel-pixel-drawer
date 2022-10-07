@@ -1,4 +1,5 @@
 
+[![CI](https://github.com/klesarev/excel-pixel-drawer/actions/workflows/main-test.yml/badge.svg?branch=master)](https://github.com/klesarev/excel-pixel-drawer/actions/workflows/main-test.yml)
 
 # Excel Pixel Drawer
 
